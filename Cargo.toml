@@ -1,0 +1,26 @@
+[package]
+name = "fern-wasm"
+version = "0.1.0"
+authors = ["Fabien PETITJEAN <fabien.petitjean@epfl.ch>"]
+categories = ["wasm"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/rust/fern.rs"
+
+[features]
+
+[dependencies]
+tinyrand = "0.5.0"
+wasm-bindgen = "0.2.63"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.13"
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
+# This makes the compiled code faster and smaller, but it makes compiling slower,
+# so it's only enabled in release mode.
+lto = true
