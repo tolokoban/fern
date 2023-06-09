@@ -39,7 +39,7 @@ module.exports = (env) => {
             devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         },
         entry: {
-            app: "./src/index.tsx",
+            app: "./src/index.ts",
         },
         target: "web",
         resolve: {

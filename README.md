@@ -1,6 +1,6 @@
 # fern
 
-Fractal Barnsley Fern displayed using Rust
+Fractal [Barnsley Fern](https://en.wikipedia.org/wiki/Barnsley_fern) displayed using Rust
 
 ## Installation
 

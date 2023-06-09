@@ -35,19 +35,8 @@
         "target": "ES6"
     },
     "output": ["./dist"],
-    "files": ["src/index.tsx"],
-    "include": [
-        "./src/**/*.mdx",
-        "./src/**/*.ts",
-        "./src/**/*.tsx",
-        "./src/**/*.css",
-        "./src/**/*.svg",
-        "./src/**/*.png",
-        "./src/**/*.jpg",
-        "./src/**/*.jpeg",
-        "./src/**/*.gif",
-        "./src/**/*.webp"
-    ],
+    "files": ["src/index.ts"],
+    "include": ["./src/**/*.ts", "./src/**/*.css"],
     "exclude": [
         "node_modules/",
         "doc/",
