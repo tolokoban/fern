@@ -4,4 +4,4 @@ Fractal Barnsley Fern displayed using Rust
 
 ## Installation
 
-Rust must be available in your path.
+[Rust](https://www.rust-lang.org/tools/install) must be available in your path.
