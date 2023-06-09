@@ -1,6 +1,8 @@
-# fern
+# Barnsley Fern
 
-Fractal [Barnsley Fern](https://en.wikipedia.org/wiki/Barnsley_fern) displayed using Rust
+Fractal [Barnsley Fern](https://en.wikipedia.org/wiki/Barnsley_fern) displayed using Rust.
+
+Check it out [here](https://tolokoban.github.io/fern).
 
 ## Installation
 
