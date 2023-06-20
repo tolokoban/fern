@@ -16,12 +16,7 @@ async function start() {
             const w = canvas.width
             const h = canvas.height
             const imageData = ctx.getImageData(0, 0, w, h)
-            barnsley_fern_paint(
-                imageData.data as unknown as Uint8Array,
-                w,
-                h,
-                time
-            )
+            actualPaint(imageData.data as unknown as Uint8Array, w, h, time)
             ctx.putImageData(imageData, 0, 0)
             loops--
         }
@@ -40,6 +35,20 @@ async function start() {
     const observer = new ResizeObserver(clear)
     observer.observe(canvas)
     canvas.addEventListener("click", clear)
+}
+
+function actualPaint(data: Uint8Array, w: number, h: number, time: number) {
+    // prettier-ignore
+    barnsley_fern_paint(
+        data,
+        w,
+        h,
+        time,
+         0.85,  0.04, -0.04,  0.85,  0.00,  1.60, 850,
+         0.20, -0.26,  0.23,  0.22,  0.00,  1.60, 70,
+        -0.15,  0.28,  0.26,  0.24,  0.00,  0.44, 70,
+         0.00,  0.00,  0.00,  0.16,  0.00,  0.00, 10
+    )
 }
 
 start()

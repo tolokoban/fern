@@ -7,25 +7,12 @@ const MAX_X: f32 = 2.6568;
 const MIN_Y: f32 = -0.0001;
 const MAX_Y: f32 = 9.9983;
 
-const FUNC1: FernFunc = FernFunc {
-    a: 0.00, b: 0.00, c: 0.00, d: 0.16, e: 0.00, f: 0.00,
-    p: rescale_probability(1)
-};
-
-const FUNC2: FernFunc = FernFunc {
-    a: 0.85, b: 0.04, c: -0.04, d: 0.85, e: 0.00, f: 1.60,
-    p: rescale_probability(85)
-};
-
-const FUNC3: FernFunc = FernFunc {
-    a: 0.20, b: -0.26, c: 0.23, d: 0.22, e: 0.00, f: 1.60,
-    p: rescale_probability(7)
-};
-
-const FUNC4: FernFunc = FernFunc {
-    a: -0.15, b: 0.28, c: 0.26, d: 0.24, e: 0.00, f: 0.44,
-    p: rescale_probability(7)
-};
+#[wasm_bindgen]
+#[derive(Clone, Copy)]
+pub struct FernFunc {
+    a: f32, b: f32, c: f32, d: f32, e: f32, f: f32,
+    p: u16,
+}
 
 #[wasm_bindgen]
 /**
@@ -37,14 +24,45 @@ const FUNC4: FernFunc = FernFunc {
  * @param h Height of the canvas.
  * @param seed Seed for the pseudo random numbers generator.
  */
-pub fn barnsley_fern_paint(data: &mut [u8], w: usize, h: usize, seed: u32) {
+pub fn barnsley_fern_paint(
+        data: &mut [u8], 
+        w: usize, 
+        h: usize, 
+        seed: u32,
+        f1a: f32, f1b: f32, f1c: f32, f1d: f32, f1e: f32, f1f: f32, f1p: u16,
+        f2a: f32, f2b: f32, f2c: f32, f2d: f32, f2e: f32, f2f: f32, f2p: u16,
+        f3a: f32, f3b: f32, f3c: f32, f3d: f32, f3e: f32, f3f: f32, f3p: u16,
+        f4a: f32, f4b: f32, f4c: f32, f4d: f32, f4e: f32, f4f: f32, f4p: u16,
+    ) {
+    let total_proba: u16 = f1p + f2p + f3p + f4p;
+    let func1: FernFunc = FernFunc {
+        a: f1a, b: f1b, c: f1c, d: f1d, e: f1e, f: f1f,
+        p: rescale_probability(f1p, total_proba)
+    };
+    let func2: FernFunc = FernFunc {
+        a: f2a, b: f2b, c: f2c, d: f2d, e: f2e, f: f2f,
+        p: rescale_probability(f1p + f2p, total_proba)
+    };
+    let func3: FernFunc = FernFunc {
+        a: f3a, b: f3b, c: f3c, d: f3d, e: f3e, f: f3f,
+        p: rescale_probability(f1p + f2p + f3p, total_proba)
+    };
+    let func4: FernFunc = FernFunc {
+        a: f4a, b: f4b, c: f4c, d: f4d, e: f4e, f: f4f,
+        p: 0
+    };   
     let mut loops = 100000;
     let mut rand = StdRand::seed(seed as u64);
     let mut point= Point{ x: 0.0, y: 0.0 };
     unsafe {
         while loops > 0 {
-            let func = get_func(&mut rand);
-            func.compute(&mut point);
+            let random = rand.next_u16();
+            if random < func1.p { func1.compute(&mut point);}
+            else if random < func2.p { func2.compute(&mut point);}
+            else if random < func3.p { func3.compute(&mut point);}
+            else { func4.compute(&mut point);}
+            if point.x < MIN_X || point.x > MAX_X { continue; }
+            if point.y < MIN_Y || point.y > MAX_Y { continue; }
             let index = find_index(&point, w, h);
             let red = data.get_unchecked_mut(index + 0);
             if *red < 255 { *red += 1; }
@@ -65,12 +83,6 @@ pub fn barnsley_fern_paint(data: &mut [u8], w: usize, h: usize, seed: u32) {
 }
 
 #[derive(Clone, Copy)]
-struct FernFunc {
-    a: f32, b: f32, c: f32, d: f32, e: f32, f: f32,
-    p: u16,
-}
-
-#[derive(Clone, Copy)]
 struct Point { x: f32, y: f32, }
 
 impl FernFunc {
@@ -82,33 +94,14 @@ impl FernFunc {
     }
 }
 
-const fn rescale_probability(value: u16) -> u16 {
-    u16::MAX / 100 * value
-}
-
-fn clamp(value: f32, min: f32, max: f32) -> f32 {
-    if value < min { return min }
-    if value > max { return max }
-    value
+const fn rescale_probability(value: u16, total: u16) -> u16 {
+    u16::MAX / total * value
 }
 
 fn find_index(point: &Point, w: usize, h: usize) -> usize {
-    let x = (clamp(point.x, MIN_X, MAX_X) - MIN_X) / (2.0 * (MAX_X - MIN_X));
-    let y = 1.0 - (clamp(point.y, MIN_Y, MAX_Y) - MIN_Y) / (MAX_Y - MIN_Y);
+    let x = (point.x - MIN_X) / (2.0 * (MAX_X - MIN_X));
+    let y = 1.0 - (point.y - MIN_Y) / (MAX_Y - MIN_Y);
     let col = (w as f32 * x) as usize;
     let row = (h as f32 * y) as usize;
     (row * w + col) * 4
 }
-
-fn get_func(rand: &mut StdRand) -> &FernFunc {
-    let mut percent: u16 = 0;
-    let random = rand.next_u16();
-    percent += FUNC2.p;
-    if random <= percent { return &FUNC2; }
-    percent += FUNC3.p;
-    if random <= percent { return &FUNC3; }
-    percent += FUNC4.p;
-    if random <= percent { return &FUNC4; }
-    &FUNC1
-}
-
