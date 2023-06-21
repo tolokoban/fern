@@ -7,7 +7,6 @@ const MAX_X: f32 = 2.6568;
 const MIN_Y: f32 = -0.0001;
 const MAX_Y: f32 = 9.9983;
 
-#[wasm_bindgen]
 #[derive(Clone, Copy)]
 pub struct FernFunc {
     a: f32, b: f32, c: f32, d: f32, e: f32, f: f32,

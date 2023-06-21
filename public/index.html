@@ -4,6 +4,15 @@
         <meta charset="utf-8" />
         <title>Barnsley Fern (Rust)</title>
         <style>
+            html {
+                font-family: sans-serif;
+                font-size: 18px;
+                font-size: 5vmin;
+                font-size: min(5vmin, 24px);
+            }
+            * {
+                box-sizing: border-box;
+            }
             #ui-container {
                 position: absolute;
                 left: 0;
@@ -12,20 +21,45 @@
                 height: 100%;
                 margin: 0;
                 display: grid;
-                place-items: center;
+                place-items: end;
                 color: #fff;
             }
             #grid {
+                --w: 4em;
                 display: grid;
-                grid-template-columns: 1em repeat(4, 5em);
+                grid-template-columns: 1em repeat(4, auto);
                 background-color: #000a;
-                gap: 0.25em 0.5em;
+                gap: 1px;
                 padding: 0.5em;
+                margin: 0.25em;
                 border-radius: 0.5em;
                 place-items: center;
             }
             #grid > .coeff {
                 grid-column: 1/2;
+            }
+            #grid input {
+                width: var(--w);
+                margin: 0;
+                font-size: 1rem;
+                line-height: 1rem;
+                border: none;
+                color: #000;
+                background-color: #fffd;
+            }
+            #grid input.bad {
+                color: #fff;
+                background-color: #a00d;
+            }
+            #ui-container select {
+                font-size: 1rem;
+                line-height: 1rem;
+                height: 2rem;
+                width: calc(100% - 2rem);
+                border: none;
+                margin: 1rem;
+                color: #000;
+                background-color: #fffd;
             }
         </style>
     </head>
@@ -33,18 +67,15 @@
     <body>
         <canvas id="canvas"></canvas>
         <div id="ui-container">
-            <div id="grid" class="hide">
-                <div></div>
-                <div>f<sub>1</sub> (1 %)</div>
-                <div>f<sub>2</sub> (85 %)</div>
-                <div>f<sub>3</sub> (7 %)</div>
-                <div>f<sub>4</sub> (7 %)</div>
-                <div class="coeff">a</div>
-                <div class="coeff">b</div>
-                <div class="coeff">c</div>
-                <div class="coeff">d</div>
-                <div class="coeff">e</div>
-                <div class="coeff">f</div>
+            <div>
+                <div id="grid" class="hide">
+                    <div></div>
+                    <div>f<sub>1</sub></div>
+                    <div>f<sub>2</sub></div>
+                    <div>f<sub>3</sub></div>
+                    <div>f<sub>4</sub></div>
+                </div>
+                <select id="preset"></select>
             </div>
         </div>
     </body>

@@ -1,7 +1,10 @@
 import { barnsley_fern_paint } from "@rust/index"
+import Inputs, { FernFunc } from "./inputs"
 import "./index.css"
 
 async function start() {
+    const inputs = new Inputs()
+
     const canvas = document.getElementById("canvas") as HTMLCanvasElement
     if (!canvas) throw Error("Missing element with id #canvas!")
 
@@ -16,7 +19,13 @@ async function start() {
             const w = canvas.width
             const h = canvas.height
             const imageData = ctx.getImageData(0, 0, w, h)
-            actualPaint(imageData.data as unknown as Uint8Array, w, h, time)
+            actualPaint(
+                imageData.data as unknown as Uint8Array,
+                w,
+                h,
+                time,
+                inputs.getFunctions()
+            )
             ctx.putImageData(imageData, 0, 0)
             loops--
         }
@@ -34,20 +43,26 @@ async function start() {
     }
     const observer = new ResizeObserver(clear)
     observer.observe(canvas)
-    canvas.addEventListener("click", clear)
+    inputs.onRedraw = clear
 }
 
-function actualPaint(data: Uint8Array, w: number, h: number, time: number) {
+function actualPaint(
+    data: Uint8Array,
+    w: number,
+    h: number,
+    time: number,
+    [f1, f2, f3, f4]: FernFunc[]
+) {
     // prettier-ignore
     barnsley_fern_paint(
         data,
         w,
         h,
         time,
-         0.85,  0.04, -0.04,  0.85,  0.00,  1.60, 850,
-         0.20, -0.26,  0.23,  0.22,  0.00,  1.60, 70,
-        -0.15,  0.28,  0.26,  0.24,  0.00,  0.44, 70,
-         0.00,  0.00,  0.00,  0.16,  0.00,  0.00, 10
+        f1.a, f1.b, f1.c, f1.d, f1.e, f1.f, Math.ceil(f1.p),
+        f2.a, f2.b, f2.c, f2.d, f2.e, f2.f, Math.ceil(f2.p),
+        f3.a, f3.b, f3.c, f3.d, f3.e, f3.f, Math.ceil(f3.p),
+        f4.a, f4.b, f4.c, f4.d, f4.e, f4.f, Math.ceil(f4.p),
     )
 }
 
