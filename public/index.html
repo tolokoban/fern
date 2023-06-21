@@ -3,9 +3,49 @@
     <head>
         <meta charset="utf-8" />
         <title>Barnsley Fern (Rust)</title>
+        <style>
+            #ui-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                display: grid;
+                place-items: center;
+                color: #fff;
+            }
+            #grid {
+                display: grid;
+                grid-template-columns: 1em repeat(4, 5em);
+                background-color: #000a;
+                gap: 0.25em 0.5em;
+                padding: 0.5em;
+                border-radius: 0.5em;
+                place-items: center;
+            }
+            #grid > .coeff {
+                grid-column: 1/2;
+            }
+        </style>
     </head>
 
     <body>
         <canvas id="canvas"></canvas>
+        <div id="ui-container">
+            <div id="grid" class="hide">
+                <div></div>
+                <div>f<sub>1</sub> (1 %)</div>
+                <div>f<sub>2</sub> (85 %)</div>
+                <div>f<sub>3</sub> (7 %)</div>
+                <div>f<sub>4</sub> (7 %)</div>
+                <div class="coeff">a</div>
+                <div class="coeff">b</div>
+                <div class="coeff">c</div>
+                <div class="coeff">d</div>
+                <div class="coeff">e</div>
+                <div class="coeff">f</div>
+            </div>
+        </div>
     </body>
 </html>
