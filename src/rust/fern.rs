@@ -3,7 +3,7 @@ use tinyrand::{Rand, StdRand, Seeded};
 
 // Bounds of the fern.
 const MIN_X: f32 = -2.1820;
-const MAX_X: f32 = 2.6568;
+const MAX_X: f32 = 2.6568 * 2.5;
 const MIN_Y: f32 = -0.0001;
 const MAX_Y: f32 = 9.9983;
 
@@ -98,7 +98,7 @@ const fn rescale_probability(value: u16, total: u16) -> u16 {
 }
 
 fn find_index(point: &Point, w: usize, h: usize) -> usize {
-    let x = (point.x - MIN_X) / (2.0 * (MAX_X - MIN_X));
+    let x = (point.x - MIN_X) / (MAX_X - MIN_X);
     let y = 1.0 - (point.y - MIN_Y) / (MAX_Y - MIN_Y);
     let col = (w as f32 * x) as usize;
     let row = (h as f32 * y) as usize;

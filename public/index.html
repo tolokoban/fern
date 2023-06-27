@@ -13,16 +13,29 @@
             * {
                 box-sizing: border-box;
             }
-            #ui-container {
+            body #open {
+                display: block;
+                position: absolute;
+                right: 0.5em;
+                bottom: 0.5em;
+            }
+            body.menu #open {
+                display: none;
+            }
+            body #ui-container {
+                display: none;
                 position: absolute;
                 left: 0;
                 top: 0;
+                padding: 0.5em 0;
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                display: grid;
                 place-items: end;
                 color: #fff;
+            }
+            body.menu #ui-container {
+                display: grid;
             }
             #grid {
                 --w: 4em;
@@ -57,17 +70,57 @@
                 height: 2rem;
                 width: calc(100% - 2rem);
                 border: none;
-                margin: 1rem;
+                margin: 0;
                 color: #000;
                 background-color: #fffd;
+            }
+            #ui-container > div > footer {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 0 0.5em;
+                gap: 0.5em;
+            }
+            #ui-container > div > footer > * {
+                flex: 1 1 auto;
+            }
+            #ui-container > div > footer > button {
+                flex: 0 0 auto;
+            }
+            #ui-container > div > header {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                font-family: monospace;
+            }
+            button {
+                font: inherit;
+                line-height: 2rem;
+                margin: 0;
+                padding: 0 0.5em;
+                background: linear-gradient(to top, #375, #7fa, #7fa, #375);
+                border: none;
+                border-radius: 0.25em;
+                font-variant: small-caps;
+                font-weight: bolder;
             }
         </style>
     </head>
 
-    <body>
+    <body class="menu">
+        <script>
+            function toggle() {
+                document.body.classList.toggle("menu")
+            }
+        </script>
         <canvas id="canvas"></canvas>
         <div id="ui-container">
             <div>
+                <header>
+                    <div>f(x) = <b>a</b>x + <b>b</b>y + <b>e</b></div>
+                    <div>f(y) = <b>c</b>x + <b>d</b>y + <b>f</b></div>
+                </header>
                 <div id="grid" class="hide">
                     <div></div>
                     <div>f<sub>1</sub></div>
@@ -75,8 +128,12 @@
                     <div>f<sub>3</sub></div>
                     <div>f<sub>4</sub></div>
                 </div>
-                <select id="preset"></select>
+                <footer>
+                    <select id="preset"></select>
+                    <button onclick="toggle()">Close</button>
+                </footer>
             </div>
         </div>
+        <button id="open" onclick="toggle()">Open</button>
     </body>
 </html>
