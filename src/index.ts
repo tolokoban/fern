@@ -2,6 +2,16 @@ import { barnsley_fern_paint } from "@rust/index"
 import Inputs, { FernFunc } from "./inputs"
 import "./index.css"
 
+// Bounds of the fern.
+// const MIN_X = -2.182
+// const MIN_Y = -0.0001
+// const MAX_X = 2.6568 * 2.5
+// const MAX_Y = 9.9983
+const MIN_X = 0.2
+const MIN_Y = 0.5
+const MAX_X = 1
+const MAX_Y = 0.8
+
 async function start() {
     const inputs = new Inputs()
 
@@ -63,6 +73,7 @@ function actualPaint(
         f2.a, f2.b, f2.c, f2.d, f2.e, f2.f, Math.ceil(f2.p),
         f3.a, f3.b, f3.c, f3.d, f3.e, f3.f, Math.ceil(f3.p),
         f4.a, f4.b, f4.c, f4.d, f4.e, f4.f, Math.ceil(f4.p),
+        MIN_X, MIN_Y, MAX_X, MAX_Y
     )
 }
 

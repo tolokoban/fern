@@ -1,12 +1,6 @@
 use wasm_bindgen::prelude::*;
 use tinyrand::{Rand, StdRand, Seeded};
 
-// Bounds of the fern.
-const MIN_X: f32 = -2.1820;
-const MAX_X: f32 = 2.6568 * 2.5;
-const MIN_Y: f32 = -0.0001;
-const MAX_Y: f32 = 9.9983;
-
 #[derive(Clone, Copy)]
 pub struct FernFunc {
     a: f32, b: f32, c: f32, d: f32, e: f32, f: f32,
@@ -32,7 +26,19 @@ pub fn barnsley_fern_paint(
         f2a: f32, f2b: f32, f2c: f32, f2d: f32, f2e: f32, f2f: f32, f2p: u16,
         f3a: f32, f3b: f32, f3c: f32, f3d: f32, f3e: f32, f3f: f32, f3p: u16,
         f4a: f32, f4b: f32, f4c: f32, f4d: f32, f4e: f32, f4f: f32, f4p: u16,
-    ) {
+        min_x: f32, min_y: f32, max_x: f32, max_y: f32
+    ) 
+{
+    let factor_x = 1.0 / (max_x - min_x);
+    let factor_y = 1.0 / (max_y - min_y);
+    let find_index = |point: &Point, w: usize, h: usize| -> usize {
+        let x = (point.x - min_x) * factor_x;
+        let y = 1.0 - (point.y - min_y) * factor_y;
+        let col = (w as f32 * x) as usize;
+        let row = (h as f32 * y) as usize;
+        (row * w + col) * 4
+    };
+        
     let total_proba: u16 = f1p + f2p + f3p + f4p;
     let func1: FernFunc = FernFunc {
         a: f1a, b: f1b, c: f1c, d: f1d, e: f1e, f: f1f,
@@ -60,8 +66,8 @@ pub fn barnsley_fern_paint(
             else if random < func2.p { func2.compute(&mut point);}
             else if random < func3.p { func3.compute(&mut point);}
             else { func4.compute(&mut point);}
-            if point.x < MIN_X || point.x > MAX_X { continue; }
-            if point.y < MIN_Y || point.y > MAX_Y { continue; }
+            if point.x < min_x || point.x > max_x { continue; }
+            if point.y < min_y || point.y > max_y { continue; }
             let index = find_index(&point, w, h);
             let red = data.get_unchecked_mut(index + 0);
             if *red < 255 { *red += 1; }
@@ -97,10 +103,3 @@ const fn rescale_probability(value: u16, total: u16) -> u16 {
     u16::MAX / total * value
 }
 
-fn find_index(point: &Point, w: usize, h: usize) -> usize {
-    let x = (point.x - MIN_X) / (MAX_X - MIN_X);
-    let y = 1.0 - (point.y - MIN_Y) / (MAX_Y - MIN_Y);
-    let col = (w as f32 * x) as usize;
-    let row = (h as f32 * y) as usize;
-    (row * w + col) * 4
-}

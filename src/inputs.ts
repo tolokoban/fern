@@ -52,6 +52,12 @@ const PRESETS: {
         [0.035, -0.11, 0.27, 0.01, -0.05, 0.005, 7],
         [-0.04, 0.11, 0.27, 0.01, 0.047, 0.06, 7],
     ],
+    coch: [
+        [0.5, 0.375, 0.5, -0.375, -0.0625, 0.5625, 10],
+        [0.5, -0.375, -0.5, -0.375, 0.5625, 1.0625, 10],
+        [1, 0, 0, 1, 0, 0, 0],
+        [1, 0, 0, 1, 0, 0, 0],
+    ],
     tree: [
         [0.4, 0, 0, 0.4, 0, 0, 5],
         [0.42, -0.42, 0.42, 0.42, 0, 2, 4],
@@ -74,28 +80,10 @@ export default class Inputs {
     private lastconfig = ""
 
     private functions: [FernFunc, FernFunc, FernFunc, FernFunc] = [
-        {
-            a: 0.85,
-            b: 0.04,
-            c: -0.04,
-            d: 0.85,
-            e: 0.0,
-            f: 1.6,
-            p: 85,
-            index: 0,
-        },
-        { a: 0.2, b: -0.26, c: 0.23, d: 0.22, e: 0.0, f: 1.6, p: 7, index: 1 },
-        {
-            a: -0.15,
-            b: 0.28,
-            c: 0.26,
-            d: 0.24,
-            e: 0.0,
-            f: 0.44,
-            p: 7,
-            index: 2,
-        },
-        { a: 0.0, b: 0.0, c: 0.0, d: 0.16, e: 0.0, f: 0.0, p: 1, index: 3 },
+        expandPreset("coch", 0),
+        expandPreset("coch", 1),
+        expandPreset("coch", 2),
+        expandPreset("coch", 3),
     ]
 
     constructor() {
@@ -192,4 +180,18 @@ function makeCoeff(key: string): any {
     div.textContent = key
     div.classList.add("coeff")
     return div
+}
+
+function expandPreset(name: keyof typeof PRESETS, index: number): FernFunc {
+    const [a, b, c, d, e, f, p] = PRESETS[name][index]
+    return {
+        a,
+        b,
+        c,
+        d,
+        e,
+        f,
+        p,
+        index,
+    }
 }
