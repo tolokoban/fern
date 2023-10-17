@@ -1,4 +1,4 @@
-import { Bounds, FernFunc, Presets } from "./types"
+import { Bounds, FernFunc, Presets } from "../types"
 
 const DEFAULT_BOUNDS: Bounds = [-2.182, -0.0001, 2.6568 * 2.5, 9.9983]
 
@@ -86,15 +86,6 @@ export default class Inputs {
 
     private lastconfig = ""
 
-    private functions: [FernFunc, FernFunc, FernFunc, FernFunc] = [
-        expandFunc(INITIAL_FUNC, 0),
-        expandFunc(INITIAL_FUNC, 1),
-        expandFunc(INITIAL_FUNC, 2),
-        expandFunc(INITIAL_FUNC, 3),
-    ]
-
-    private bounds: Bounds = PRESETS[INITIAL_FUNC].bounds
-
     constructor() {
         const grid = document.getElementById("grid")
         if (!grid) throw Error("Missing element #grid!")
@@ -121,6 +112,15 @@ export default class Inputs {
         })
         preset.value = INITIAL_FUNC as string
     }
+
+    private functions: [FernFunc, FernFunc, FernFunc, FernFunc] = [
+        expandFunc(INITIAL_FUNC, 0),
+        expandFunc(INITIAL_FUNC, 1),
+        expandFunc(INITIAL_FUNC, 2),
+        expandFunc(INITIAL_FUNC, 3),
+    ]
+
+    private bounds: Bounds = PRESETS[INITIAL_FUNC].bounds
 
     getFunctions() {
         const funcs = [...this.functions]

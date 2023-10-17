@@ -39,7 +39,7 @@ module.exports = (env) => {
             devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         },
         entry: {
-            app: "./src/index.ts",
+            app: "./src/index.tsx",
         },
         target: "web",
         resolve: {
@@ -217,24 +217,6 @@ module.exports = (env) => {
                         },
                     ],
                 },
-                {
-                    test: /\.mdx?$/,
-                    use: [
-                        // `babel-loader` is optional:
-                        { loader: "babel-loader", options: {} },
-                        {
-                            loader: "@mdx-js/loader",
-                            /** @type {import('@mdx-js/loader').Options} */
-                            options: {
-                                /* jsxImportSource: …, otherOptions… */
-                            },
-                        },
-                    ],
-                },
-                // {
-                //     test: /\.wasm$/,
-                //     type: "asset/inline",
-                // },
             ],
         },
     }

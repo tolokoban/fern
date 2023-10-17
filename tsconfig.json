@@ -9,7 +9,7 @@
         "diagnostics": true,
         "downlevelIteration": true,
         "esModuleInterop": true,
-        "extendedDiagnostics": false,
+        "extendedDiagnostics": true,
         "incremental": false,
         "jsx": "react-jsx",
         "lib": ["dom", "dom.iterable", "ES6"],
@@ -29,19 +29,13 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "sourceMap": true,
-        "strict": false,
+        "strict": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "ES6"
     },
     "output": ["./dist"],
-    "files": ["src/index.ts"],
-    "include": ["./src/**/*.ts", "./src/**/*.css"],
-    "exclude": [
-        "node_modules/",
-        "doc/",
-        "**/*.spec.*",
-        "**/*.test.*",
-        "**/*.SKIP.*"
-    ]
+    "files": ["src/index.tsx"],
+    "include": ["./src/**/*.ts", "./src/**/*.css", "src/index.tsx"],
+    "exclude": ["node_modules/", "**/*.spec.*", "**/*.test.*", "**/*.SKIP.*"]
 }

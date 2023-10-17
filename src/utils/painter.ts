@@ -1,23 +1,9 @@
+import Inputs from "@/utils/inputs"
+import { Bounds, FernFunc } from "@/types"
 import { barnsley_fern_paint } from "@rust/index"
-import Inputs from "./inputs"
-import "./index.css"
-import { Bounds, FernFunc } from "./types"
 
-// Bounds of the fern.
-// const MIN_X = -2.182
-// const MIN_Y = -0.0001
-// const MAX_X = 2.6568 * 2.5
-// const MAX_Y = 9.9983
-const MIN_X = 0.2
-const MIN_Y = 0.5
-const MAX_X = 1
-const MAX_Y = 0.8
-
-async function start() {
+export function startPainter(canvas: HTMLCanvasElement) {
     const inputs = new Inputs()
-
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement
-    if (!canvas) throw Error("Missing element with id #canvas!")
 
     const ctx = canvas.getContext("2d")
     if (!ctx) throw Error("Unable to create a 2D context!")
@@ -79,5 +65,3 @@ function actualPaint(
         minX, minY, maxX, maxY
     )
 }
-
-start()
