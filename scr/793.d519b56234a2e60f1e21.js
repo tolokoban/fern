@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfern=self.webpackChunkfern||[]).push([[793],{793:(e,n,r)=>{r.r(n),r.d(n,{default:()=>c});var t=r(893),i=r(294),u=r(273);function c(){return i.useEffect((0,u.H)("/barnsley/edit"),[]),(0,t.jsx)("div",{children:"Redirecting..."})}},273:(e,n,r)=>{function t(e){return()=>function(e){window.location.hash=e}(e)}r.d(n,{H:()=>t})}}]);
