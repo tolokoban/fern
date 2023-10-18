@@ -4,7 +4,6 @@ import { makeGoto } from "@/utils/goto"
 import { useBarnsleyParams } from "@/data/data"
 
 export default function Page() {
-    const params = useBarnsleyParams()
-    React.useEffect(makeGoto(`/barnsley/view/${JSON.stringify(params)}`), [])
+    React.useEffect(makeGoto(`/barnsley/edit`), [])
     return <div>Redirecting...</div>
 }
