@@ -1,8 +1,8 @@
-import { Bounds, FernFunc, Presets } from "../types"
+import { Bounds, BarnsleyFernFunc, BarnsleyPresets } from "../types"
 
 const DEFAULT_BOUNDS: Bounds = [-2.182, -0.0001, 2.6568 * 2.5, 9.9983]
 
-const PRESETS: Presets = {
+const PRESETS: BarnsleyPresets = {
     barnsley: {
         functions: [
             [0, 0, 0, 0.16, 0, 0, 1],
@@ -77,7 +77,7 @@ const PRESETS: Presets = {
     },
 }
 
-const KEYS: Array<keyof FernFunc> = ["a", "b", "c", "d", "e", "f", "p"]
+const KEYS: Array<keyof BarnsleyFernFunc> = ["a", "b", "c", "d", "e", "f", "p"]
 
 const INITIAL_FUNC: keyof typeof PRESETS = "coch"
 
@@ -113,7 +113,12 @@ export default class Inputs {
         preset.value = INITIAL_FUNC as string
     }
 
-    private functions: [FernFunc, FernFunc, FernFunc, FernFunc] = [
+    private functions: [
+        BarnsleyFernFunc,
+        BarnsleyFernFunc,
+        BarnsleyFernFunc,
+        BarnsleyFernFunc,
+    ] = [
         expandFunc(INITIAL_FUNC, 0),
         expandFunc(INITIAL_FUNC, 1),
         expandFunc(INITIAL_FUNC, 2),
@@ -166,7 +171,7 @@ export default class Inputs {
         this.onRedraw()
     }
 
-    private makeInput(func: FernFunc, key: keyof FernFunc) {
+    private makeInput(func: BarnsleyFernFunc, key: keyof BarnsleyFernFunc) {
         const input = document.createElement("input")
         input.type = "number"
         input.value = `${func[key]}`
@@ -183,7 +188,11 @@ export default class Inputs {
         return input
     }
 
-    private update(func: FernFunc, key: keyof FernFunc, value: number) {
+    private update(
+        func: BarnsleyFernFunc,
+        key: keyof BarnsleyFernFunc,
+        value: number
+    ) {
         func[key] = value
         this.onRedraw()
     }
@@ -196,7 +205,10 @@ function makeCoeff(key: string): any {
     return div
 }
 
-function expandFunc(name: keyof typeof PRESETS, index: number): FernFunc {
+function expandFunc(
+    name: keyof typeof PRESETS,
+    index: number
+): BarnsleyFernFunc {
     const [a, b, c, d, e, f, p] = PRESETS[name].functions[index]
     return {
         a,

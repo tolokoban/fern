@@ -1,4 +1,4 @@
-export interface Preset {
+export interface BarnsleyPreset {
     functions: [
         a: number,
         b: number,
@@ -6,16 +6,16 @@ export interface Preset {
         d: number,
         e: number,
         f: number,
-        p: number
+        p: number,
     ][]
     bounds: Bounds
 }
 
-export interface Presets {
-    [name: string]: Preset
+export interface BarnsleyPresets {
+    [name: string]: BarnsleyPreset
 }
 
-export interface FernFunc {
+export interface BarnsleyFernFunc {
     a: number
     b: number
     c: number

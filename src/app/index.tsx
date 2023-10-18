@@ -1,17 +1,23 @@
 /**
  * WARNING! this file has been generated automatically.
  * Please do not edit it because it will probably be overwritten.
- * 2023-10-17T13:28:42.060Z
+ * 2023-10-18T12:16:09.013Z
  */
 import React from "react"
 
 const Page0 = React.lazy(() => import("./page"))
-const Page1 = React.lazy(() => import("./view/page"))
+const Page2 = React.lazy(() => import("./barnsley/edit/page"))
+const Page4 = React.lazy(() => import("./barnsley/view/[params]/page"))
 
 export default function App() {
     return (
         <Route path="/" Page={Page0} fallback={<div>Loading...</div>}>
-            <Route path="/view" Page={Page1} fallback={<div>Loading...</div>} />
+            <Route path="/barnsley"  fallback={<div>Loading...</div>}>
+                <Route path="/barnsley/edit" Page={Page2} fallback={<div>Loading...</div>} />
+                <Route path="/barnsley/view"  fallback={<div>Loading...</div>}>
+                    <Route path="/barnsley/view/[params]" Page={Page4} fallback={<div>Loading...</div>} />
+                </Route>
+            </Route>
         </Route>
     )
 }
