@@ -1,14 +1,17 @@
 import React from "react"
-import { Children, IconShow, ViewButton, ViewPanel } from "@tolokoban/ui"
+import { Children, ViewButton, ViewPanel } from "@tolokoban/ui"
 
 import {
+    BarnsleyFunc,
     getBarnsleyPreset,
     getBarnsleyPresetNames,
     useBarnsleyParams,
 } from "@/data/data"
+import { makeGoto } from "@/utils/goto"
 
 import Styles from "./page.module.css"
-import { makeGoto } from "@/utils/goto"
+import { Input } from "@/components/Input"
+import { AffineTransfo } from "@/components/AffineTransfo"
 
 export default function PageEdit() {
     const defaultParams = useBarnsleyParams()
@@ -21,6 +24,27 @@ export default function PageEdit() {
         const newParams = structuredClone(params)
         newParams.functions[col][row] = value
         setParams(newParams)
+    }
+    const handleFunctionChange = (
+        index: number,
+        a: number,
+        b: number,
+        c: number,
+        d: number,
+        e: number,
+        f: number
+    ): void => {
+        const functions = [...params.functions] as [
+            BarnsleyFunc,
+            BarnsleyFunc,
+            BarnsleyFunc,
+            BarnsleyFunc,
+        ]
+        functions[index] = [a, b, c, d, e, f, functions[index][6]]
+        setParams({
+            ...params,
+            functions,
+        })
     }
     return (
         <ViewPanel
@@ -92,6 +116,17 @@ export default function PageEdit() {
                         })
                     )}
                 </ViewPanel>
+                <ViewPanel
+                    className={Styles.formula}
+                    display="flex"
+                    justifyContent="space-between"
+                    margin={["M", 0]}
+                >
+                    <div className={Styles.formula}>f(x) = ax + by + c</div>
+                    <div className={Styles.formula}>f(y) = dx + ey + f</div>
+                </ViewPanel>
+                <hr />
+                <AffineTransfo onFunctionChange={handleFunctionChange} />
             </Section>
             <Section>
                 <h2>Presets</h2>
@@ -132,26 +167,6 @@ function Section({ children }: { children: Children }) {
         >
             {children}
         </ViewPanel>
-    )
-}
-
-interface InputProps {
-    value: number
-    onChange(value: number): void
-}
-
-function Input({ value, onChange }: InputProps) {
-    const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Number(evt.target.value)
-        if (!Number.isNaN(value)) onChange(value)
-    }
-    return (
-        <input
-            className={Styles.Input}
-            type="number"
-            value={value}
-            onInput={handleChange}
-        />
     )
 }
 
