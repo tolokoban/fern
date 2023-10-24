@@ -56,11 +56,12 @@ pub fn barnsley_fern_paint(
         a: f4a, b: f4b, c: f4c, d: f4d, e: f4e, f: f4f,
         p: 0
     };   
-    let mut loops = 100000;
+    let mut loops = 1000000;
     let mut rand = StdRand::seed(seed as u64);
     let mut point= Point{ x: 0.0, y: 0.0 };
     unsafe {
         while loops > 0 {
+            loops -= 1;
             let random = rand.next_u16();
             if random < func1.p { func1.compute(&mut point);}
             else if random < func2.p { func2.compute(&mut point);}
@@ -82,7 +83,7 @@ pub fn barnsley_fern_paint(
             if *green < 255 { *green += 1; }
             let blue = data.get_unchecked_mut(index2 + 2);
             if *blue < 255 { *blue += 1; }
-            loops -= 1;
+            loops -= 9;
         }
     }
 }
