@@ -28,6 +28,7 @@
     },
     "homepage": "https://github.com/tolokoban/snapshot-annotation#readme",
     "dependencies": {
+        "@tolokoban/react-state": "^0.1.0",
         "@tolokoban/type-guards": "^0.3.0",
         "@tolokoban/ui": "^0.11.1",
         "react": "^18.2.0",

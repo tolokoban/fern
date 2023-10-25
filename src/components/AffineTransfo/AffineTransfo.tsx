@@ -27,9 +27,9 @@ export function AffineTransfo({ onFunctionChange }: AffineTransfoProps) {
         const S = Math.sin(angle)
         const a = C * sx
         const b = -S
-        const c = tx
-        const d = S
-        const e = C * sy
+        const c = S
+        const d = C * sy
+        const e = tx
         const f = ty
         onFunctionChange(index, a, b, c, d, e, f)
     }

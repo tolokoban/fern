@@ -1,21 +1,28 @@
 import React from "react"
-import { Children, ViewButton, ViewPanel } from "@tolokoban/ui"
+import {
+    Children,
+    IconShow,
+    ViewButton,
+    ViewFloatingButton,
+    ViewPanel,
+} from "@tolokoban/ui"
 
 import {
     BarnsleyFunc,
+    BarnsleyParams,
     getBarnsleyPreset,
     getBarnsleyPresetNames,
-    useBarnsleyParams,
 } from "@/data/data"
-import { makeGoto } from "@/utils/goto"
-
-import Styles from "./page.module.css"
+import { goto, makeGoto } from "@/utils/goto"
 import { Input } from "@/components/Input"
 import { AffineTransfo } from "@/components/AffineTransfo"
 
+import Styles from "./page.module.css"
+import { useBarnsleyParamsState } from "@/state"
+import { BarnsleyBoundsEditor } from "@/components/BarnsleyBoundsEditor"
+
 export default function PageEdit() {
-    const defaultParams = useBarnsleyParams()
-    const [params, setParams] = React.useState(defaultParams)
+    const [params, setParams] = useBarnsleyParamsState()
     const handlePreset = (name: string) => {
         const preset = getBarnsleyPreset(name)
         setParams(preset)
@@ -60,31 +67,22 @@ export default function PageEdit() {
             width="100%"
             height="100%"
         >
-            <Section>
-                <ViewButton
-                    onClick={makeGoto(
-                        `/barnsley/view/${encodeURIComponent(
-                            JSON.stringify(params)
-                        )}`
-                    )}
-                >
-                    View this fractal
-                </ViewButton>
-            </Section>
+            <ButtonShow params={params} />
             <Section>
                 <h2>Functions</h2>
                 <ViewPanel
                     display="grid"
-                    gridTemplateColumns="auto repeat(4, 1fr)"
+                    gridTemplateColumns="auto repeat(4, 1fr) auto"
                     placeItems="stretch"
                     gap="XS"
                     width="100%"
                 >
                     {range(-1, 6).map((row) =>
-                        range(-1, 3).map((col) => {
+                        range(-1, 4).map((col) => {
                             const key = `${row}/${col}`
                             if (row < 0) {
                                 if (col < 0) return <div key={key}></div>
+                                if (col > 3) return <div></div>
                                 return (
                                     <ViewPanel
                                         key={key}
@@ -102,6 +100,26 @@ export default function PageEdit() {
                                     <ViewPanel key={key}>
                                         {"abcdef%".charAt(row)}
                                     </ViewPanel>
+                                )
+                            }
+                            if (col > 3) {
+                                return (
+                                    <small>
+                                        {
+                                            [
+                                                "x",
+                                                "y",
+                                                "x",
+                                                "y",
+                                                <span>
+                                                    t<sub>x</sub>
+                                                </span>,
+                                                <span>
+                                                    t<sub>y</sub>
+                                                </span>,
+                                            ][row]
+                                        }
+                                    </small>
                                 )
                             }
                             return (
@@ -122,36 +140,50 @@ export default function PageEdit() {
                     justifyContent="space-between"
                     margin={["M", 0]}
                 >
-                    <div className={Styles.formula}>f(x) = ax + by + c</div>
-                    <div className={Styles.formula}>f(y) = dx + ey + f</div>
+                    <div className={Styles.formula}>f(x) = ax + by + e</div>
+                    <div className={Styles.formula}>f(y) = cx + dy + f</div>
                 </ViewPanel>
                 <hr />
                 <AffineTransfo onFunctionChange={handleFunctionChange} />
             </Section>
+            <ButtonShow params={params} />
+            <Section>
+                <h2>Bounds</h2>
+                <BarnsleyBoundsEditor />
+            </Section>
+            <ButtonShow params={params} />
             <Section>
                 <h2>Presets</h2>
-                {getBarnsleyPresetNames().map((name) => (
-                    <ViewButton
-                        width="100%"
-                        margin={["XS", 0]}
-                        variant="text"
-                        onClick={() => handlePreset(name)}
-                    >
-                        {name}
-                    </ViewButton>
-                ))}
+                <ViewPanel display="flex" flexWrap="wrap" alignItems="center">
+                    {getBarnsleyPresetNames().map((name) => (
+                        <ViewButton
+                            margin={0}
+                            variant="text"
+                            onClick={() => handlePreset(name)}
+                        >
+                            {name}
+                        </ViewButton>
+                    ))}
+                </ViewPanel>{" "}
             </Section>
-            <Section>
-                <ViewButton
-                    onClick={makeGoto(
+            <ButtonShow params={params} />
+        </ViewPanel>
+    )
+}
+
+function ButtonShow({ params }: { params: BarnsleyParams }) {
+    return (
+        <ViewPanel display="flex" justifyContent="space-around">
+            <ViewFloatingButton
+                icon={IconShow}
+                onClick={() =>
+                    goto(
                         `/barnsley/view/${encodeURIComponent(
                             JSON.stringify(params)
                         )}`
-                    )}
-                >
-                    View this fractal
-                </ViewButton>
-            </Section>
+                    )
+                }
+            />
         </ViewPanel>
     )
 }
@@ -181,3 +213,4 @@ function range(a: number, b: number) {
     }
     return arr
 }
+0

@@ -3,12 +3,12 @@ import React from "react"
 import { PainterBarnsley } from "@/painter/barnsley"
 
 import Styles from "./page.module.css"
-import { useBarnsleyParams } from "@/data/data"
+import { useBarnsleyRouteParams } from "@/data/data"
 import { IconEdit, IconReload, ViewFloatingButton } from "@tolokoban/ui"
 import { makeGoto } from "@/utils/goto"
 
 export default function PageView() {
-    const params = useBarnsleyParams()
+    const params = useBarnsleyRouteParams()
     const ref = React.useRef<null | HTMLCanvasElement>(null)
     React.useEffect(() => {
         PainterBarnsley.canvas = ref.current

@@ -19,3 +19,8 @@ input.Input::-webkit-inner-spin-button {
 input.Input[type="number"] {
     appearance: textfield;
 }
+
+.error {
+    background: var(--theme-color-error);
+    color: var(--theme-color-on-error);
+}

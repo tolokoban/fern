@@ -2,6 +2,7 @@ import { assertType } from "@tolokoban/type-guards"
 import React from "react"
 
 import { useRouteParams } from "@/app"
+import { State } from "@/state"
 
 export type BarnsleyFunc = [
     a: number,
@@ -24,7 +25,7 @@ export interface BarnsleyParams {
 export type BarnsleyPresets = Record<string, BarnsleyParams>
 
 const BARNSLEY_PRESETS: BarnsleyPresets = {
-    barnsley: {
+    Barnsley: {
         functions: [
             [0, 0, 0, 0.16, 0, 0, 1],
             [0.85, 0.04, -0.04, 0.85, 0, 1.6, 85],
@@ -33,7 +34,7 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [-2.182, -0.0001, 2.6568 * 2.5, 9.9983],
     },
-    cyclosorus: {
+    Cyclosorus: {
         functions: [
             [0, 0, 0, 0.25, 0, -0.4, 2],
             [0.95, 0.005, -0.005, 0.93, -0.002, 0.5, 84],
@@ -42,16 +43,7 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [0, 0, 2, 7],
     },
-    modified: {
-        functions: [
-            [0, 0, 0, 0.2, 0, -0.12, 1],
-            [0.845, 0.035, -0.035, 0.82, 0, 1.6, 85],
-            [0.2, -0.31, 0.255, 0.245, 0, 0.29, 7],
-            [-0.15, 0.24, 0.25, 0.2, 0, 0.68, 7],
-        ],
-        bounds: [-2.182, -0.0001, 6.5, 9],
-    },
-    culcita: {
+    Culcita: {
         functions: [
             [0, 0, 0, 0.25, 0, -0.14, 2],
             [0.85, 0.02, -0.02, 0.83, 0, 1, 84],
@@ -60,7 +52,7 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [-4, 0, 2, 6],
     },
-    fishbone: {
+    Fishbone: {
         functions: [
             [0, 0, 0, 0.25, 0, -0.4, 2],
             [0.95, 0.002, -0.002, 0.93, -0.002, 0.5, 84],
@@ -69,7 +61,16 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [-5, -1, 2, 8],
     },
-    coch: {
+    Sierpiński: {
+        functions: [
+            [0.5, 0, 0, 0.5, -0.666, 0, 10],
+            [0.5, 0, 0, 0.5, 0.666, 0, 10],
+            [0.5, 0, 0, 0.5, 0, 1, 10],
+            [0, 0, 0, 0, 0, 0, 0],
+        ],
+        bounds: [-2, 0, 2, 2],
+    },
+    Coch: {
         functions: [
             [0.5, 0.375, 0.5, -0.375, -0.0625, 0.5625, 10],
             [0.5, -0.375, -0.5, -0.375, 0.5625, 1.0625, 10],
@@ -78,7 +79,7 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [0.2, 0.6, 1, 0.8],
     },
-    tree: {
+    Tree: {
         functions: [
             [0.4, 0, 0, 0.4, 0, 0, 5],
             [0.42, -0.42, 0.42, 0.42, 0, 2, 4],
@@ -87,7 +88,7 @@ const BARNSLEY_PRESETS: BarnsleyPresets = {
         ],
         bounds: [-2.4, 0, 6.9, 4.5],
     },
-    bee: {
+    Hive: {
         functions: [
             [0.6178, 0, 0, -0.6178, 0, 10, 15],
             [0, -0.786, 0.786, 0, 0.786, 0, 15],
@@ -113,19 +114,6 @@ export function getDefaultBarnsleyPreset(): BarnsleyParams {
     return getBarnsleyPreset(getBarnsleyPresetNames()[0])
 }
 
-export function loadBarnsleyParams(): BarnsleyParams {
-    const data = tryToParseJSON(window.localStorage.getItem("Barnsley") ?? "")
-    return isBarnsleyParams(data) ? data : getDefaultBarnsleyPreset()
-}
-
-function tryToParseJSON(text: string): unknown {
-    try {
-        return JSON.parse(text)
-    } catch (ex) {
-        return null
-    }
-}
-
 function isBarnsleyParams(data: unknown): data is BarnsleyParams {
     if (!data) return false
 
@@ -142,21 +130,19 @@ function isBarnsleyParams(data: unknown): data is BarnsleyParams {
     }
 }
 
-export function useBarnsleyParams(): BarnsleyParams {
+export function useBarnsleyRouteParams(): BarnsleyParams {
     const { params } = useRouteParams()
     const barnsleyParams = React.useMemo(() => {
-        let barnsleyParams = loadBarnsleyParams()
+        let barnsleyParams: BarnsleyParams = {
+            bounds: State.barnsley.bounds.value,
+            functions: State.barnsley.functions.value,
+        }
         try {
             const data = JSON.parse(decodeURIComponent(params))
             if (isBarnsleyParams(data)) barnsleyParams = data
         } catch (ex) {
             console.error(ex)
         } finally {
-            window.localStorage.setItem(
-                "Barnsley",
-                JSON.stringify(barnsleyParams)
-            )
-            console.log("🚀 [data] barnsleyParams = ", barnsleyParams) // @FIXME: Remove this line written on 2023-10-18 at 16:53
             return barnsleyParams
         }
     }, [params])

@@ -55,6 +55,21 @@ class Painter {
 
     set params(value: BarnsleyParams | null) {
         this._params = value
+        if (value) {
+            ;[0, 1, 2, 3].forEach((index) => {
+                const [a, b, c, d, e, f] = value.functions[index]
+                console.log(
+                    `f${index + 1}(x) = ${a.toFixed(3)}.x + ${b.toFixed(
+                        3
+                    )}.y + ${c.toFixed()}`
+                )
+                console.log(
+                    `f${index + 1}(y) = ${d.toFixed(3)}.x + ${e.toFixed(
+                        3
+                    )}.y + ${f.toFixed()}`
+                )
+            })
+        }
         this.reset()
     }
 

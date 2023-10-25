@@ -1,3 +1,7 @@
 .formula {
     font-family: cursive;
 }
+
+small {
+    opacity: 0.5;
+}
