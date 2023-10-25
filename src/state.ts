@@ -1,22 +1,33 @@
 import AtomicState from "@tolokoban/react-state"
 import { TypeDef, isType } from "@tolokoban/type-guards"
 
-import { BarnsleyParams, getDefaultBarnsleyPreset } from "./data/data"
+import { BarnsleyFunc, BarnsleyParams } from "./data/data"
+import { Bounds } from "./types"
 
 export const State = {
     barnsley: {
-        bounds: new AtomicState(getDefaultBarnsleyPreset().bounds, {
+        bounds: new AtomicState<Bounds>([-2, -2, 2, 2], {
             storage: {
                 id: "barnsley/bounds",
                 guard: makeGuard(["array(4)", "number"]),
             },
         }),
-        functions: new AtomicState(getDefaultBarnsleyPreset().functions, {
-            storage: {
-                id: "barnsley/functions",
-                guard: makeGuard(["array(4)", ["array(7)", "number"]]),
-            },
-        }),
+        functions: new AtomicState<
+            [BarnsleyFunc, BarnsleyFunc, BarnsleyFunc, BarnsleyFunc]
+        >(
+            [
+                [1, 0, 0, 1, 0, 0, 10],
+                [1, 0, 0, 1, 0, 0, 10],
+                [1, 0, 0, 1, 0, 0, 10],
+                [1, 0, 0, 1, 0, 0, 10],
+            ],
+            {
+                storage: {
+                    id: "barnsley/functions",
+                    guard: makeGuard(["array(4)", ["array(7)", "number"]]),
+                },
+            }
+        ),
     },
 }
 
